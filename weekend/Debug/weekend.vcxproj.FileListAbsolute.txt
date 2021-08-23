@@ -1,0 +1,2 @@
+D:\projektit\weekend\weekend\Debug\weekend.exe
+D:\projektit\weekend\weekend\Debug\weekend.pdb
