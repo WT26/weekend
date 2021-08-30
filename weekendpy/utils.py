@@ -3,11 +3,16 @@ import numpy as np
 def vec3(x, y, z):
 	return np.array([x, y, z])
 
+def vecLength(vector: np.array):
+	return np.sqrt(lengthSquared(vector))
+
+
+def lengthSquared(vector: np.array):
+	return vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2]
+
+
 def unitVector(vector: np.array):
-	norm=np.linalg.norm(vector, ord=1)
-	if norm==0:
-		norm=np.finfo(vector.dtype).eps
-	return vector/norm
+	return vector / vecLength(vector)
 
 
 
