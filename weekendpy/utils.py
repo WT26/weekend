@@ -1,5 +1,8 @@
 import numpy as np
 
+PI = 3.1415926535897932385
+
+
 def vec3(x, y, z):
 	return np.array([x, y, z])
 
@@ -14,6 +17,8 @@ def lengthSquared(vector: np.array):
 def unitVector(vector: np.array):
 	return vector / vecLength(vector)
 
+def degreesToRadians(degrees):
+	return degrees * pi / 180.0
 
 
 def writeColor(fileStream, color: np.array):

@@ -1,9 +1,13 @@
-from math import radians
+from math import inf, radians
 import sys
 import argparse
 from ray import Ray
+from sphere import Sphere
 import numpy as np
 from utils import *
+from hittable import Hittable
+from hittable import HitRecord
+from hittableList import HittableList
 
 def cmdline_args():
 	p = argparse.ArgumentParser(add_help=False)
@@ -17,29 +21,15 @@ def cmdline_args():
 
 	return(p.parse_args())
 
-def hitSphere(center: np.array, radius: float, r: Ray) -> bool:
-	oc = r.origin() - center
-	a = r.direction()
-	a = np.power(np.linalg.norm(a), 2)
-	halfB = np.dot(oc, r.direction())
-	c = np.power(np.linalg.norm(oc), 2) - radius * radius
-	discriminant = halfB * halfB - a*c
-
-	if(discriminant < 0):
-		return -1.0
-	else:
-		return (-halfB - np.sqrt(discriminant)) / a
-
-def rayColor(r: Ray) -> np.array:
-	t = hitSphere(vec3(0.0, 0.0, -1.0), 0.5, r)
-
-	if(t > 0.0):
-		N = unitVector(r.at(t) - vec3(0, 0, -1))
-		return 0.5 * vec3(N[0] + 1.0, N[1] + 1.0, N[2] + 1.0)
+def rayColor(r: Ray, world: Hittable) -> np.array:
+	hitRecord = HitRecord()
+	if(world.hit(r, 0, inf, hitRecord)):
+		return 0.5 * (hitRecord.normal + vec3(1.0, 1.0, 1.0))
 
 	unitDir = unitVector(r.direction())
 	t = 0.5 * (unitDir[1] + 1.0)
 	return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0)
+
 
 if __name__ == '__main__':
 	args = cmdline_args()
@@ -50,6 +40,10 @@ if __name__ == '__main__':
 	aspectRatio = 16.0 / 9.0
 	height = int(width / aspectRatio)
 
+	# World
+	world = HittableList()
+	world.add(Sphere(vec3(0, 0, -1), 0.5))
+	world.add(Sphere(vec3(0, -100.5, -1), 100))
 
 	# Camera
 	viewPortHeight = 2.0
@@ -72,8 +66,8 @@ if __name__ == '__main__':
 			u = float(i)/float(width)
 			v = float(j)/float(height)
 			r = Ray(origin, lowerLeftCorner + u * horizontal + v * vertical - origin)
-			rgb = rayColor(r)
-			listOfRgbs.append(rgb)
+			pixelColor = rayColor(r, world)
+			listOfRgbs.append(pixelColor)
 			#rgb = np.array([[u, v, 0.2]])
 
 
@@ -83,3 +77,5 @@ if __name__ == '__main__':
 
 
 	imgFile.close()
+
+
