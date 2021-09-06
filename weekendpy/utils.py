@@ -13,17 +13,19 @@ def vecLength(vector: np.array):
 def lengthSquared(vector: np.array):
 	return vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2]
 
-
 def unitVector(vector: np.array):
 	return vector / vecLength(vector)
 
 def degreesToRadians(degrees):
-	return degrees * pi / 180.0
+	return degrees * PI / 180.0
 
+def clamp(x, min, max):
+	if(x < min):
+		return min
+	if(x > max):
+		return max
+	return x
 
-def writeColor(fileStream, color: np.array):
-	ir = int(255.999 * color[0])
-	ig = int(255.999 * color[1])
-	ib = int(255.999 * color[2])
+def writeColor(fileStream, color: np.array, spp: float):
 
-	fileStream.write("{} {} {}\n".format(ir, ig, ib))
+	fileStream.write("{} {} {}\n".format(color[0], color[1], color[2]))
