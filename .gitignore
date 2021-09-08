@@ -10,6 +10,16 @@
 *.userosscache
 *.sln.docstates
 
+<<<<<<< HEAD
+=======
+*.ppm
+
+weekend/.vs/
+weekend/Debug/
+
+
+.vscode/
+>>>>>>> master
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -23,6 +33,10 @@ mono_crash.*
 [Rr]eleases/
 x64/
 x86/
+<<<<<<< HEAD
+=======
+[Ww][Ii][Nn]32/
+>>>>>>> master
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
@@ -61,6 +75,12 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+<<<<<<< HEAD
+=======
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+>>>>>>> master
 # StyleCop
 StyleCopReport.xml
 
@@ -86,6 +106,10 @@ StyleCopReport.xml
 *.tmp_proj
 *_wpftmp.csproj
 *.log
+<<<<<<< HEAD
+=======
+*.tlog
+>>>>>>> master
 *.vspscc
 *.vssscc
 .builds
@@ -137,6 +161,14 @@ _TeamCity*
 .axoCover/*
 !.axoCover/settings.json
 
+<<<<<<< HEAD
+=======
+# Coverlet is a free, cross platform Code Coverage Tool
+coverage*.json
+coverage*.xml
+coverage*.info
+
+>>>>>>> master
 # Visual Studio code coverage results
 *.coverage
 *.coveragexml
@@ -196,6 +228,12 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
+<<<<<<< HEAD
+=======
+# Nuget personal access tokens and Credentials
+nuget.config
+
+>>>>>>> master
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
@@ -348,3 +386,28 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Fody - auto-generated XML schema
+FodyWeavers.xsd
+
+# VS Code files for those working on multiple tools
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# Windows Installer files from build outputs
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# JetBrains Rider
+.idea/
+*.sln.iml
