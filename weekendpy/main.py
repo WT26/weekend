@@ -34,8 +34,8 @@ def rayColor(r: Ray, world: Hittable, depth) -> np.array:
 	if (depth <= 0):
 		return vec3(0.0, 0.0, 0.0)
 
-	if(world.hit(r, 0, inf, hitRecord)):
-		target = hitRecord.point + hitRecord.normal + randomInUnitSphere()
+	if(world.hit(r, 0.001, inf, hitRecord)):
+		target = hitRecord.point + hitRecord.normal + randomUnitVector()
 		return 0.5 * rayColor(Ray(hitRecord.point, target-hitRecord.point), world, depth-1)
 
 	unitDir = unitVector(r.direction())

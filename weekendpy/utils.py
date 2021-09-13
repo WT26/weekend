@@ -33,6 +33,9 @@ def writeColor(fileStream, color: np.array, spp: float):
 def randomVec() -> np.array:
 	return vec3(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
 
+def randomUnitVector():
+	return unitVector(randomInUnitSphere())
+
 def randomInUnitSphere():
 	while True:
 		p = randomVec()
