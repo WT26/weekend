@@ -17,8 +17,8 @@ class HittableList(Hittable):
 
 	def hit(self, ray: Ray, tMin, tMax, rec: HitRecord) -> bool:
 		tempRecord = HitRecord()
-		hitAnything = False;
-		closestSoFar = tMax;
+		hitAnything = False
+		closestSoFar = tMax
 
 		for obj in self.objects:
 			if(obj.hit(ray, tMin, closestSoFar, tempRecord)):
@@ -26,7 +26,8 @@ class HittableList(Hittable):
 				rec.point = tempRecord.point
 				rec.t = tempRecord.t
 				rec.frontFace = tempRecord.frontFace
+				rec.material = tempRecord.material
 				hitAnything = True
 				closestSoFar = tempRecord.t
 
-		return hitAnything;
+		return hitAnything

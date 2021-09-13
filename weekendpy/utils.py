@@ -26,6 +26,13 @@ def clamp(x, min, max):
 		return max
 	return x
 
+def nearZero(vec: np.array):
+	epsilon = 1e-8
+	return (np.abs(vec[0]) < epsilon) and (np.abs(vec[1]) < epsilon) and (np.abs(vec[2]) < epsilon)
+
+def reflect(v: np.array, n: np.array):
+	return v - 2 * np.dot(v, n) * n
+
 def writeColor(fileStream, color: np.array, spp: float):
 
 	fileStream.write("{} {} {}\n".format(color[0], color[1], color[2]))

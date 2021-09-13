@@ -13,6 +13,7 @@ from hittable import HitRecord
 from hittableList import HittableList
 from camera import Camera
 from imageContext import ImageContext
+from material import *
 import multiprocessing as mp
 
 
@@ -35,8 +36,11 @@ def rayColor(r: Ray, world: Hittable, depth) -> np.array:
 		return vec3(0.0, 0.0, 0.0)
 
 	if(world.hit(r, 0.001, inf, hitRecord)):
-		target = hitRecord.point + hitRecord.normal + randomUnitVector()
-		return 0.5 * rayColor(Ray(hitRecord.point, target-hitRecord.point), world, depth-1)
+		scattered = Ray()
+		attenuation = vec3(0.0, 0.0, 0.0)
+		if(hitRecord.material.scatter(r, hitRecord, attenuation, scattered)):
+			return attenuation * rayColor(scattered, world, depth-1)
+		return vec3(0.0, 0.0, 0.0)
 
 	unitDir = unitVector(r.direction())
 	t = 0.5 * (unitDir[1] + 1.0)
@@ -60,16 +64,26 @@ if __name__ == '__main__':
 	print(args)
 
 	# Image
-	width = 400
+	width = 200
 	aspectRatio = 16.0 / 9.0
 	height = int(width / aspectRatio)
-	spp = 4
+	spp = 16
 	maxDepth = 8
 
 	# World
 	world = HittableList()
-	world.add(Sphere(vec3(0, 0, -1), 0.5))
-	world.add(Sphere(vec3(0, -100.5, -1), 100))
+
+	groundMat = Lambertian(vec3(0.8, 0.8, 0.0))
+	centerMat = Lambertian(vec3(0.7, 0.3, 0.3))
+	leftMaterial = Metal(vec3(0.8, 0.8, 0.8), 0.3)
+	rightMaterial = Metal(vec3(0.8, 0.6, 0.2), 1.0)
+
+
+
+	world.add(Sphere(vec3(0, -100.5, -1), 100, groundMat))
+	world.add(Sphere(vec3(0, 0, -1), 0.5, centerMat))
+	world.add(Sphere(vec3(-1.0, 0.0, -1.0), 0.5, leftMaterial))
+	world.add(Sphere(vec3(1.0, 0.0, -1.0), 0.5, rightMaterial))
 
 	# Camera
 	cam = Camera(aspectRatio)

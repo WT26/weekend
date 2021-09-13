@@ -1,6 +1,10 @@
+import numpy as np
 
 class Ray:
-	def __init__(self, orig, dir):
+	orig = np.array([])
+	dir = np.array([])
+
+	def __init__(self, orig = np.array([]), dir = np.array([])):
 		self.orig = orig
 		self.dir = dir
 
