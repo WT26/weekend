@@ -1,13 +1,10 @@
-import ctypes
-from math import inf, radians
-import sys
+from math import inf
 import argparse
 import threading
 import numpy as np
 import random
 import copy
 
-from numpy.core.fromnumeric import reshape
 from ray import Ray
 from sphere import Sphere
 from utils import *
@@ -31,16 +28,21 @@ def cmdline_args():
 
 	return(p.parse_args())
 
-def rayColor(r: Ray, world: Hittable) -> np.array:
+def rayColor(r: Ray, world: Hittable, depth) -> np.array:
 	hitRecord = HitRecord()
+
+	if (depth <= 0):
+		return vec3(0.0, 0.0, 0.0)
+
 	if(world.hit(r, 0, inf, hitRecord)):
-		return 0.5 * (hitRecord.normal + vec3(1.0, 1.0, 1.0))
+		target = hitRecord.point + hitRecord.normal + randomInUnitSphere()
+		return 0.5 * rayColor(Ray(hitRecord.point, target-hitRecord.point), world, depth-1)
 
 	unitDir = unitVector(r.direction())
 	t = 0.5 * (unitDir[1] + 1.0)
 	return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0)
 
-def rayTrace(width, height, scanLine, spp, cam, world, imageContext):
+def rayTrace(width, height, scanLine, spp, cam, world, maxDepth, imageContext):
 	rgbSlice = np.zeros((width, 3))
 	for i in range(width):
 		colorSum = vec3(0.0, 0.0, 0.0)
@@ -48,7 +50,7 @@ def rayTrace(width, height, scanLine, spp, cam, world, imageContext):
 			u = (float(i) + random.uniform(0.0, 0.999999))/float(width)
 			v = (float(j) + random.uniform(0.0, 0.999999))/float(height)
 			r = cam.getRay(u, v)
-			colorSum += rayColor(r, world)
+			colorSum += rayColor(r, world, maxDepth)
 		rgbSlice[i] = colorSum
 
 	imageContext.addNewSample(rgbSlice, scanLine)
@@ -61,7 +63,8 @@ if __name__ == '__main__':
 	width = 400
 	aspectRatio = 16.0 / 9.0
 	height = int(width / aspectRatio)
-	spp = 16
+	spp = 4
+	maxDepth = 8
 
 	# World
 	world = HittableList()
@@ -91,7 +94,7 @@ if __name__ == '__main__':
 			t.join()
 	else:
 		for j in range(height, 0, -1):
-			rayTrace(width, height, j, spp, cam, world, imageContext)
+			rayTrace(width, height, j, spp, cam, world, maxDepth, imageContext)
 
 	reshaped = imageContext.listOfRgbs.reshape(width*height, 3)
 	reshaped = int(255.999) * reshaped
